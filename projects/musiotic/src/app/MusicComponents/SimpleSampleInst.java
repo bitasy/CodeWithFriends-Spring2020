@@ -63,9 +63,10 @@ public final class SimpleSampleInst extends jm.audio.Instrument{
             //define the chain
             SampleIn sin = new SampleIn(this, fileName);
             sin.setWholeFile(wholeFile);	
-            ReSample reSample = new ReSample(sin, this.baseFreq);
-            Volume vol = new Volume(reSample);
-            Envelope env = new Envelope(vol, points);
+            //ReSample reSample = new ReSample(sin, this.baseFreq);
+			//Volume vol = new Volume(reSample);
+			Volume vol = new Volume(sin);
+			Envelope env = new Envelope(vol, points);
             StereoPan span = new StereoPan(env);
             SampleOut sout = new SampleOut(span);
 	}

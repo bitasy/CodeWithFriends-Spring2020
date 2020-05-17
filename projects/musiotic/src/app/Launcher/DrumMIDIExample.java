@@ -1,10 +1,14 @@
 package Launcher;
 
+import jm.audio.AOException;
 import jm.audio.Instrument;
 import jm.music.data.Note;
 import jm.music.data.Part;
 import jm.music.data.Phrase;
 import jm.music.data.Score;
+import jm.util.Play;
+import jm.util.Read;
+import jm.util.View;
 import jm.util.Write;
 
 import static jm.constants.Frequencies.FRQ;
@@ -12,6 +16,9 @@ import static jm.constants.Pitches.REST;
 import MusicComponents.SimpleSampleInst;
 
 import java.io.File;
+
+// I see 3 ways of implementing Audio with JMusic, 1, creating a whole psuedo midi system that plays audio at times, or 2, change the java soundbank, or3
+// Creating the wav file every single time a user wants to listen to that part. Yikes.
 
 public class DrumMIDIExample {
     public static void main(String[] args){
@@ -25,15 +32,14 @@ public class DrumMIDIExample {
         Phrase hatsPhrase = new Phrase();
         Phrase openHatsPhrase = new Phrase();
 
-        File f = new File("/audio/kicks/ac_kick_6.au");
-        f.canRead();
-
-        SimpleSampleInst kickInst = new SimpleSampleInst("/src/audio/kicks/ac_kick_6.au", FRQ[48]);
+        // 440 here doesn't actually matter (below)
+        SimpleSampleInst kickInst = new SimpleSampleInst("src/resources/audio/kicks/ac_kick_6.au", 440, true);
 //        SimpleSampleInst snareInst = new SimpleSampleInst("Snare.au", FRQ[38]);
 //        SimpleSampleInst hatsInst = new SimpleSampleInst("Hats.au", FRQ[42]);
 //        SimpleSampleInst openHatsInst = new SimpleSampleInst("HHOpen.au", FRQ[46]);
+
         Instrument[] drumKit = {kickInst};//, snareInst, hatsInst, openHatsInst};
-//
+
         // kick
         for(int i=0;i<2;i++) {
             Note n = new Note(36,2.0);
@@ -79,8 +85,11 @@ public class DrumMIDIExample {
 //
 //        //write midi
         Write.midi(s, "src/resources/audio/AudioDrums.mid");
-//
-//        //write au
-//        Write.au(s, "/audio/AudioDrums.au", drumKit);
+        Play.midi(s);
+        //write au
+        Write.au(s, "src/resources/audio/AudioDrums.wav", drumKit);
+        //float[] data = Read.audio("src/resources/audio/AudioDrums.au");
+        //Write.audio(data, "src/resources/audio/AudioDrums.wav");
+
     }
 }
